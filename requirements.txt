@@ -5,3 +5,4 @@ langchain-groq
 faiss-cpu
 sentence-transformers
 python-dotenv
+file_hashes.json
