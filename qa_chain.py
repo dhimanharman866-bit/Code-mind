@@ -15,24 +15,24 @@ def build_qa_chain(retriever):
 
     # Prompt
     prompt = ChatPromptTemplate.from_template("""
-You are a senior software engineer.
-                                              
+You are an expert software engineer analyzing a codebase.
+
 Conversation History:
 {chat_history}
 
-
-Context:
+Retrieved Code Context:
 {context}
 
-Question:
-{question}                                                                                                                                     
-Rules:
-- Answer ONLY from context
-- Mention file name
-- Identify language
-- If bug → fix it
-- If not found → say "Not found in codebase"
+Question: {question}
 
+Instructions:
+- Answer ONLY using the code context provided above
+- Always start your answer by mentioning the file name like: "In `filename.py`:"
+- Identify the programming language in one word at the start
+- Be direct and specific — no vague summaries
+- If a bug is found, show the broken code and then the fixed version
+- If the answer is not in the context, respond exactly: "Not found in codebase"
+- Format code blocks using markdown backticks
 
 Answer:
 """)
