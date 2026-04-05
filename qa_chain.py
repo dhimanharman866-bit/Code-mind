@@ -33,6 +33,8 @@ Instructions:
 - If a bug is found, show the broken code and then the fixed version
 - If the answer is not in the context, respond exactly: "Not found in codebase"
 - Format code blocks using markdown backticks
+- You MUST mention every relevant file involved, not just the main ones
+- Never mention README.md or config files unless directly asked
 
 Answer:
 """)
