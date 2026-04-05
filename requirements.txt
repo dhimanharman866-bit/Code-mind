@@ -1,19 +1,12 @@
 streamlit
-
 langchain
 langchain-community
-
+langchain-huggingface
 faiss-cpu
-
 pydantic
 sentence-transformers
 huggingface-hub
-
 python-dotenv
-
 tiktoken
 numpy
-torch
-torchvision
-torchaudio
-transformers
+torch --index-url https://download.pytorch.org/whl/cpu

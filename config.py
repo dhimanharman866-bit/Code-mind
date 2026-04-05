@@ -1,4 +1,5 @@
-FOLDER_PATH=r""
+import os
+FOLDER_PATH = os.getenv("FOLDER_PATH", "")
 INDEX_PATH="faiss_index"
 HASH_FILE="file_hases.json"
 
