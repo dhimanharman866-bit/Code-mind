@@ -10,3 +10,5 @@ python-dotenv
 tiktoken
 numpy
 torch --index-url https://download.pytorch.org/whl/cpu
+langchain-groq
+torchvision
