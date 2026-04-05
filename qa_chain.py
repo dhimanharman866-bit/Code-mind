@@ -1,19 +1,30 @@
 import os
+import streamlit as st
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnableLambda,RunnablePassthrough
+from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from dotenv import load_dotenv
 
 load_dotenv()
+
 def build_qa_chain(retriever):
+    # Try Streamlit secrets first, then environment variable
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+        st.error("GROQ_API_KEY not found! Add it to Codespaces secrets or Streamlit secrets.")
+        st.stop()
+
     llm = ChatGroq(
         model_name="llama-3.1-8b-instant",
-        api_key=os.getenv("GROQ_API_KEY"),
+        api_key=api_key,
         temperature=0
     )
 
-    # Prompt
     prompt = ChatPromptTemplate.from_template("""
 You are an expert software engineer analyzing a codebase.
 
@@ -39,14 +50,12 @@ Instructions:
 Answer:
 """)
 
-    # Format retrieved docs into text
     def format_docs(docs):
         return "\n\n".join(
             f"File: {doc.metadata.get('source')}\n{doc.page_content}"
             for doc in docs
         )
 
-    # Runnable chain
     chain = (
         {
             "context": RunnableLambda(lambda x: x.get('question','')) | retriever | format_docs,
