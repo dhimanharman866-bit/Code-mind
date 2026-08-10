@@ -260,7 +260,7 @@ def run_indexing(tmpdir, source_name):
     emb = get_embedding()
     vs  = build_or_load_vectorstore(chunks, emb)
     ret = get_retriever(vs)
-    qa  = build_qa_chain(ret)
+    qa  = build_qa_chain(ret, vs)
 
     st.session_state.qa           = qa
     st.session_state.retriever    = ret
@@ -332,13 +332,14 @@ with st.sidebar:
                             with zipfile.ZipFile(zip_path, "r") as zip_ref:
                                 zip_ref.extractall(tmpdir)
                             run_indexing(tmpdir, uploaded_file.name.replace(".zip", ""))
+
+                        st.success("Codebase indexed successfully.")
+                        st.rerun()
+
                     except ValueError as e:
                         st.error(str(e))
                     except Exception as e:
                         st.error(f"Unexpected error: {e}")
-
-                st.success("Codebase indexed successfully.")
-                st.rerun()
 
     # ── GitHub tab ────────────────────────────────────────────────────
     with github_tab:
@@ -353,8 +354,10 @@ with st.sidebar:
                 with st.spinner("Cloning repository..."):
                     try:
                         with tempfile.TemporaryDirectory() as tmpdir:
+                            repo_name = repo_url.rstrip("/").split("/")[-1].replace(".git", "")
+                            clone_path = os.path.join(tmpdir, repo_name)
                             result = subprocess.run(
-                                ["git", "clone", "--depth=1", repo_url, tmpdir],
+                                ["git", "clone", "--depth=1", repo_url, clone_path],
                                 capture_output=True,
                                 text=True
                             )
@@ -362,16 +365,15 @@ with st.sidebar:
                                 st.error(f"Clone failed: {result.stderr.strip()}")
                                 st.stop()
 
-                            repo_name = repo_url.rstrip("/").split("/")[-1].replace(".git", "")
-                            run_indexing(tmpdir, repo_name)
+                            run_indexing(clone_path, repo_name)
+
+                        st.success("Repository indexed successfully.")
+                        st.rerun()
 
                     except ValueError as e:
                         st.error(str(e))
                     except Exception as e:
                         st.error(f"Unexpected error: {e}")
-
-                st.success("Repository indexed successfully.")
-                st.rerun()
 
     st.divider()
 
