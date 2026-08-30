@@ -1,7 +1,11 @@
 import os, hashlib, json
 from langchain_core.documents import Document
+from config import HASH_FILE, INDEX_PATH
 
-HASH_FILE = "file_hashes.json"  # inline to remove config dependency
+# Anchor HASH_FILE next to the FAISS index directory so it's always
+# in a predictable location regardless of the working directory.
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+HASH_FILE = os.path.join(_BASE_DIR, HASH_FILE)
 
 SUPPORTED_EXTENSIONS = {
     ".py", ".js", ".ts", ".jsx", ".tsx",

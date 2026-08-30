@@ -23,11 +23,12 @@ def main():
         query=input("ask:").strip()
         if query.lower()=="exit":
             break
-        result=qa.invoke(query)
-        print("answer: ",result)
+        result = qa.invoke({"question": query, "chat_history": []})
+        print("answer: ", result)
 
         print("\n📂 Sources:")
-        for doc in docs:
+        source_docs = retriever.invoke(query)
+        for doc in source_docs:
             print(doc.metadata["source"])
 
 if __name__ == "__main__":

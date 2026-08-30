@@ -1,7 +1,7 @@
 import os
 FOLDER_PATH = os.getenv("FOLDER_PATH", "")
 INDEX_PATH="faiss_index_new"
-HASH_FILE="file_hases.json"
+HASH_FILE="file_hashes.json"
 
 CHUNK_SIZE=500
 CHUNK_OVERLAP=100

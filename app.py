@@ -250,12 +250,13 @@ for key, default in {
 
 def run_indexing(tmpdir, source_name):
     """Shared indexing logic for both ZIP and GitHub sources."""
-    docs   = load_document(tmpdir)
-    chunks = split_document(docs)
+    docs = load_document(tmpdir)
 
     if not docs:
         st.error("No supported source files found. Ensure the project contains .py / .js / .java / .cpp / .ts files.")
         st.stop()
+
+    chunks = split_document(docs)
 
     emb = get_embedding()
     vs  = build_or_load_vectorstore(chunks, emb)
