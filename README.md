@@ -73,7 +73,7 @@ Codebase (ZIP / GitHub)
 |---|---|
 | UI | Streamlit |
 | LLM | Groq (`openai/gpt-oss-120b`) |
-| Query generation | Groq (`llama-3.1-8b-instant`) |
+| Query generation | Groq (`openai/gpt-oss-20b`) |
 | Embedding model | `BAAI/bge-large-en-v1.5` |
 | Reranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` |
 | Vector store | FAISS (CPU) |
