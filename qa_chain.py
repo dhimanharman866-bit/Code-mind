@@ -6,6 +6,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from dotenv import load_dotenv
 from retriever import get_all_sources
+from reranker import rerank_docs
+
 
 load_dotenv()
 
@@ -72,15 +74,24 @@ ANSWER:""")
         )
 
     chain = (
-        {
-            "context": RunnableLambda(lambda x: x.get('question', '')) | retriever | format_docs,
-            "question": RunnableLambda(lambda x: x.get('question', '')),
-            "chat_history": RunnableLambda(lambda x: format_chat_history(x.get('chat_history', []))),
-            "file_list": RunnableLambda(lambda _: file_list_context),
-        }
+        RunnablePassthrough.assign(
+            context=RunnableLambda(
+                lambda x: format_docs(
+                    rerank_docs(
+                        x.get("question", ""),
+                        retriever.invoke(x.get("question", "")),
+                        top_n=5,
+                    )
+                )
+            ),
+            chat_history=RunnableLambda(
+                lambda x: format_chat_history(x.get("chat_history", []))
+            ),
+            file_list=RunnableLambda(lambda _: file_list_context),
+        )
         | prompt
         | llm
         | StrOutputParser()
     )
 
-    return chain
+    return chain
