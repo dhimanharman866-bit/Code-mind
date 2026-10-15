@@ -1,3 +1,4 @@
+<img width="306" height="1897" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/7caeee62-6597-4e87-a23b-93085dfeefc3" />
 # CodeMind — RAG-Powered Codebase Assistant
 
 An intelligent codebase Q&A system that uses a multi-stage Retrieval-Augmented Generation (RAG) pipeline to let you ask natural language questions about any codebase and get precise, code-grounded answers.
